@@ -1,0 +1,183 @@
+\documentclass[10pt,authoryear,onecolumn]{article}
+\usepackage{amssymb}
+\usepackage{lipsum}
+\usepackage[backend=biber,style=apa]{biblatex}
+\usepackage{biblatex}
+\usepackage{longtable}
+\usepackage[spanish]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{tabularx}
+\usepackage{geometry}
+\geometry{a4paper, margin=1in}
+\usepackage{babel}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage[utf8]{inputenc}
+\usepackage{amssymb}
+\usepackage{lipsum}
+\usepackage[spanish]{babel}
+\geometry{a4paper, margin=1in}
+\usepackage{csquotes}
+\usepackage{listings}
+\usepackage{xcolor}
+\addbibresource{references.bib}
+
+
+\title{Métricas de McCabe (Complejidad Ciclomática)}
+\date{13 de Junio del 2024}
+
+\begin{document}
+
+\maketitle
+
+\section{Métricas de McCabe (Complejidad Ciclomática)}
+
+\subsection{Definición y Tipos}
+
+La complejidad ciclomatica es una métrica introducida por Thomas J. McCabe en 1976 para medir la complejidad lógica de un programa. Esta métrica cuantifica el número de caminos linealmente independientes a través del código fuente de un programa, proporcionando una medida objetiva de la complejidad del software.
+
+\subsubsection{Tipos}
+Existen varias formas de calcular la complejidad ciclomatica:
+\begin{itemize}
+    \item \textbf{Fórmula de Aristas y Nodos:} \( V(G) = E - N + 2 \), donde \( E \) es el número de aristas y \( N \) es el número de nodos en el grafo de flujo del programa \parencite{scalabrino2019from}.
+    \item \textbf{Fórmula de Nodos Predicados:} \( V(G) = P + 1 \), donde \( P \) es el número de nodos predicados, es decir, nodos que contienen condiciones \parencite{liu2018evaluate}.
+    \item \textbf{Fórmula de Regiones del Grafo:} \( V(G) = R \), donde \( R \) es el número de regiones en el grafo de control de flujo \parencite{odeh2023measuring}.
+\end{itemize}
+
+\subsection{Aplicaciones y Limitaciones}
+
+\subsubsection{Aplicaciones}
+La complejidad ciclomatica se utiliza principalmente para:
+\begin{itemize}
+    \item \textbf{Planificación de Pruebas:} Determinar el número mínimo de casos de prueba necesarios para cubrir todos los caminos posibles a través del código \parencite{peitek2020empirical}.
+    \item \textbf{Evaluación de la Calidad del Código:} Proporciona una medida objetiva de la complejidad del código, facilitando la identificación de módulos complejos \parencite{scalabrino2019from}.
+    \item \textbf{Mantenimiento y Refactorización:} Ayuda a identificar partes del código que son excesivamente complejas y que podrían beneficiarse de la refactorización \parencite{monteiro2019measuring}.
+\end{itemize}
+
+\newpage
+\textbf{Ejemplo de Código en Python para Calcular la Complejidad Ciclomática}
+
+\begin{lstlisting}[language=Python, caption=Calculando la Complejidad Ciclomática en Python, basicstyle=\ttfamily\footnotesize, frame=single, breaklines=true, backgroundcolor=\color{lightgray}]
+import ast
+
+class CyclomaticComplexityVisitor(ast.NodeVisitor):
+    def __init__(self):
+        self.complexity = 1  # Start with a base complexity of 1
+
+    def visit_If(self, node):
+        self.complexity += 1
+        self.generic_visit(node)
+
+    def visit_For(self, node):
+        self.complexity += 1
+        self.generic_visit(node)
+
+    def visit_While(self, node):
+        self.complexity += 1
+        self.generic_visit(node)
+
+    def visit_With(self, node):
+        self.complexity += 1
+        self.generic_visit(node)
+
+    def visit_ExceptHandler(self, node):
+        self.complexity += 1
+        self.generic_visit(node)
+
+    def visit_BoolOp(self, node):
+        self.complexity += 1
+        self.generic_visit(node)
+
+    def visit_And(self, node):
+        self.complexity += 1
+        self.generic_visit(node)
+
+    def visit_Or(self, node):
+        self.complexity += 1
+        self.generic_visit(node)
+
+def calculate_cyclomatic_complexity(code):
+    tree = ast.parse(code)
+    visitor = CyclomaticComplexityVisitor()
+    visitor.visit(tree)
+    return visitor.complexity
+
+# Example function to analyze
+code_example = """
+def example_function(a, b):
+    if a > b:
+        return a - b
+    elif a == b:
+        return 0
+    else:
+        return b - a
+
+    for i in range(10):
+        print(i)
+        
+    while a < b:
+        a += 1
+        
+    try:
+        x = 1 / 0
+    except ZeroDivisionError:
+        print("Division by zero")
+"""
+
+complexity = calculate_cyclomatic_complexity(code_example)
+print(f"Cyclomatic Complexity: {complexity}")
+\end{lstlisting}
+
+\subsubsection{Limitaciones}
+A pesar de sus beneficios, la complejidad ciclomatica también tiene algunas limitaciones:
+\begin{itemize}
+    \item \textbf{No Considera la Complejidad del Dominio:} La métrica solo evalúa la complejidad del código, sin tener en cuenta la complejidad del problema que el código está resolviendo.
+    \item \textbf{Ignora el Rendimiento del Código:} No proporciona información sobre el rendimiento del código, como el tiempo de ejecución o el uso de memoria.
+    \item \textbf{Dependencia de la Estructura del Código:} Puede ser engañosa si el código está estructurado de manera ineficiente, con muchas ramas condicionales innecesarias.
+\end{itemize}
+
+\section{Evaluación de la Métrica}
+
+La evaluación de la métrica de complejidad ciclomatica se realiza principalmente a través del análisis del código fuente para identificar estructuras de control que incrementan la complejidad del software. Aquí se describen los pasos comunes y las herramientas utilizadas para evaluar esta métrica:
+
+\subsection{Pasos para Evaluar la Complejidad Ciclomática}
+
+\begin{enumerate}
+    \item \textbf{Construcción del Grafo de Flujo de Control:}
+    \begin{itemize}
+        \item \textbf{Identificación de Nodos y Aristas:} Cada instrucción en el código se representa como un nodo y las transiciones entre estas instrucciones (flujo de control) se representan como aristas.
+        \item \textbf{Creación del Grafo:} Se construye un grafo dirigido donde los nodos son las instrucciones y las aristas representan las transiciones de control.
+    \end{itemize}
+    \item \textbf{Cálculo de la Complejidad Ciclomática:}
+    \begin{itemize}
+        \item \textbf{Fórmula Básica:} \( V(G) = E - N + 2 \), donde \( E \) es el número de aristas, \( N \) es el número de nodos, y \( G \) es el número de componentes conectados del grafo.
+        \item \textbf{Método Alternativo:} También se puede calcular como el número de regiones en el grafo de control de flujo, o como \( P + 1 \), donde \( P \) es el número de nodos predicados.
+    \end{itemize}
+    \item \textbf{Interpretación de los Resultados:}
+    \begin{itemize}
+        \item \textbf{Valores Bajos (1-10):} Indican código de baja complejidad, fácil de entender y mantener.
+        \item \textbf{Valores Moderados (11-20):} Indican código con complejidad moderada, puede requerir atención en términos de pruebas y mantenimiento.
+        \item \textbf{Valores Altos (>20):} Indican alta complejidad, difícil de entender y mantener, y puede ser propenso a errores.
+    \end{itemize}
+\end{enumerate}
+
+\subsection{Herramientas para Evaluar la Complejidad Ciclomática}
+
+\begin{itemize}
+    \item \textbf{Visual Studio Code Metrics:}
+    Visual Studio proporciona una funcionalidad integrada para calcular las métricas de código, incluida la complejidad ciclomatica. Esto se puede hacer seleccionando `Analyze > Calculate Code Metrics for Solution` \parencite{visualstudio2024}.
+    
+    \item \textbf{MATLAB Code Analyzer:}
+    MATLAB tiene una herramienta llamada Code Analyzer que puede medir la complejidad ciclomatica utilizando el comando `checkcode` con la opción `"-cyc"` \parencite{matlab2024}.
+    
+        \item \textbf{Omni Calculator:}
+    Omni Calculator ofrece una herramienta en línea para calcular la complejidad ciclomatica ingresando parámetros del código \parencite{omni2024}.
+    
+    \item \textbf{SonarQube:}
+    SonarQube es una plataforma de análisis de código que incluye la métrica de complejidad ciclomatica entre otras métricas de calidad de código \parencite{sonarqube2024}.
+    
+\end{itemize}
+
+\printbibliography
+
+\end{document}

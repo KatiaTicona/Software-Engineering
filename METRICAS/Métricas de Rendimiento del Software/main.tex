@@ -1,0 +1,182 @@
+\documentclass{article}
+\usepackage{lipsum}
+\usepackage[backend=biber,style=apa]{biblatex}
+\usepackage{biblatex}
+\usepackage{longtable}
+\usepackage[spanish]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{tabularx}
+\usepackage{geometry}
+\geometry{a4paper, margin=1in}
+\usepackage{babel}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage[utf8]{inputenc}
+\usepackage{amssymb}
+\usepackage{lipsum}
+\usepackage[spanish]{babel}
+\geometry{a4paper, margin=1in}
+\usepackage{csquotes}
+\usepackage{listings}
+\usepackage{xcolor}
+\addbibresource{references.bib}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage{csquotes}
+\usepackage[backend=biber,style=apa]{biblatex}
+\usepackage{listings}
+\usepackage{xcolor}
+
+\addbibresource{references.bib}
+
+\title{Métricas de Rendimiento del Software}
+
+\date{13 de Junio del 2024}
+
+\begin{document}
+
+\maketitle
+
+\section{Métricas de Rendimiento del Software}
+
+\subsection{Definición y Tipos}
+
+Las métricas de rendimiento del software son esenciales para evaluar y asegurar que el software cumple con los requisitos de eficiencia y efectividad. Estas métricas cuantitativas permiten medir diversos aspectos del rendimiento, como el tiempo de respuesta, la capacidad de procesamiento, el uso de recursos y la estabilidad del software.
+
+\subsubsection{Tipos de Métricas de Rendimiento}
+\begin{itemize}
+    \item \textbf{Tiempo de Respuesta:} Mide el tiempo que tarda el sistema en responder a una solicitud. Es crucial para aplicaciones interactivas, donde la rapidez de la respuesta impacta directamente en la experiencia del usuario \parencite{gorton2011essential}.
+    \item \textbf{Throughput (Rendimiento):} Mide la cantidad de transacciones o solicitudes que el sistema puede procesar en un tiempo determinado. Un alto throughput indica que el sistema puede manejar grandes cargas de trabajo eficientemente \parencite{jones2017economics}.
+    \item \textbf{Tasa de Error:} Mide el porcentaje de solicitudes que resultan en errores. Una tasa de error baja es indicativa de un sistema más fiable y estable \parencite{devsecops2019}.
+    \item \textbf{Uso de CPU y Memoria:} Monitoriza el uso de recursos del sistema. Un alto uso de CPU o memoria puede indicar problemas de rendimiento que necesitan ser abordados \parencite{scalability2019}.
+    \item \textbf{Disponibilidad:} Mide el tiempo durante el cual el sistema está operativo y accesible. Este es un indicador clave para cumplir con los acuerdos de nivel de servicio (SLA) \parencite{performance2019}.
+    \item \textbf{Tiempos de Recuperación (MTTR):} Mide el tiempo promedio que se necesita para recuperar el sistema después de una falla. Es crucial para evaluar la capacidad de recuperación y la fiabilidad del sistema \parencite{gorton2011essential}.
+\end{itemize}
+
+\subsection{Aplicaciones y Limitaciones}
+
+\subsubsection{Aplicaciones de las Métricas de Rendimiento}
+\begin{itemize}
+    \item \textbf{Optimización de la Experiencia del Usuario:} El tiempo de respuesta y la disponibilidad son métricas clave para asegurar que los usuarios tengan una experiencia fluida y sin interrupciones. Un menor tiempo de respuesta mejora la satisfacción del usuario y la eficiencia operativa \parencite{jones2017economics}.
+    \item \textbf{Gestión de Recursos:} El monitoreo del uso de CPU y memoria ayuda a identificar cuellos de botella y optimizar la utilización de recursos. Esto puede llevar a decisiones informadas sobre la necesidad de más recursos o ajustes en la configuración del sistema \parencite{scalability2019}.
+    \item \textbf{Mantenimiento Proactivo:} La tasa de error y el MTTR permiten a los equipos de desarrollo y operaciones identificar problemas antes de que afecten gravemente al sistema, facilitando un enfoque proactivo para el mantenimiento y la mejora continua \parencite{performance2019}.
+    \item \textbf{Escalabilidad:} El throughput es esencial para evaluar cómo un sistema puede manejar incrementos en la carga de trabajo. Esto es particularmente importante para aplicaciones que necesitan escalar rápidamente en respuesta a la demanda creciente \parencite{devsecops2019}.
+\end{itemize}
+
+\subsubsection{Limitaciones de las Métricas de Rendimiento}
+\begin{itemize}
+    \item \textbf{Contexto Dependiente:} Las métricas de rendimiento pueden ser difíciles de interpretar sin un contexto adecuado. Por ejemplo, un tiempo de respuesta alto podría ser aceptable en ciertos escenarios y problemático en otros \parencite{gorton2011essential}.
+    \item \textbf{Medición Incompleta:} Las métricas de rendimiento a menudo no capturan todos los aspectos de la calidad del software. Pueden enfocarse en la eficiencia a expensas de la usabilidad o la funcionalidad \parencite{jones2017economics}.
+    \item \textbf{Sobre-Simplificación:} Existe el riesgo de simplificar en exceso la evaluación del rendimiento al depender únicamente de métricas cuantitativas sin considerar factores cualitativos como la experiencia del usuario o la mantenibilidad del código \parencite{performance2019}.
+\end{itemize}
+
+\section{Ejemplo de Código en Python para Métricas de Rendimiento}
+
+Aquí tienes un ejemplo de cómo implementar la medición de algunas métricas de rendimiento utilizando Python:
+
+\begin{verbatim}
+import time
+import psutil
+import os
+
+# Funcion de ejemplo para analizar
+def example_function():
+    total = 0
+    for i in range(1, 1000000):
+        total += i
+    return total
+
+# Medir el tiempo de respuesta
+def measure_response_time(func):
+    start_time = time.time()
+    result = func()
+    end_time = time.time()
+    response_time = end_time - start_time
+    return response_time, result
+
+# Medir el uso de CPU y memoria
+def measure_cpu_memory_usage(func):
+    process = psutil.Process(os.getpid())
+    cpu_before = process.cpu_percent(interval=1)
+    mem_before = process.memory_info().rss / (1024 * 1024)  # Convertir a MB
+
+    func()# Ejecutar la función
+
+    cpu_after = process.cpu_percent(interval=1)
+    mem_after = process.memory_info().rss / (1024 * 1024)  # Convertir a MB
+
+    cpu_usage = cpu_after - cpu_before
+    mem_usage = mem_after - mem_before
+
+    return cpu_usage, mem_usage
+
+\# Ejecutar las pruebas
+response_time, result = measure_response_time(example_function)
+cpu_usage, mem_usage = measure_cpu_memory_usage(example_function)
+
+print(f"Response Time: {response_time:.4f} seconds")
+print(f"CPU Usage: {cpu_usage:.2f}%")
+print(f"Memory Usage: {mem_usage:.2f} MB")
+\end{verbatim}
+
+\section{Evaluación de las Métricas de Rendimiento}
+
+Las métricas de rendimiento del software se evalúan mediante diversas herramientas y técnicas que permiten analizar diferentes aspectos del rendimiento. Aquí se describen los pasos generales para evaluar estas métricas:
+
+\subsubsection{Definición de Métricas y Objetivos}
+\begin{itemize}
+    \item Identificar las métricas de rendimiento relevantes para el proyecto (p.ej., tiempo de respuesta, throughput, uso de CPU y memoria, disponibilidad, tasa de error, MTTR).
+    \item Definir objetivos y umbrales de rendimiento para cada métrica.
+\end{itemize}
+
+\subsubsection{Monitoreo y Recolección de Datos}
+\begin{itemize}
+    \item Utilizar herramientas de monitoreo (p.ej., New Relic, AppDynamics, Datadog, Prometheus) para recopilar datos en tiempo real sobre las métricas de rendimiento.
+    \item Implementar logging y métricas en el código para obtener datos específicos de la aplicación.
+\end{itemize}
+
+\subsubsection{Análisis de Datos}
+\begin{itemize}
+    \item Analizar los datos recolectados para identificar patrones y posibles cuellos de botella.
+    \item Utilizar herramientas de análisis y visualización de datos (p.ej., Grafana, Kibana) para presentar los datos de manera comprensible.
+\end{itemize}
+
+\subsubsection{Pruebas de Rendimiento}
+\begin{itemize}
+    \item Realizar pruebas de carga, estrés y escalabilidad para evaluar cómo el sistema maneja diferentes niveles de tráfico y condiciones de uso.
+    \item Herramientas comunes incluyen Apache JMeter, LoadRunner, Gatling.
+\end{itemize}
+
+\subsubsection{Optimización y Mejora Continua}
+\begin{itemize}
+    \item Basándose en el análisis de los datos y los resultados de las pruebas, identificar áreas de mejora y optimizar el código y la infraestructura.
+    \item Realizar ajustes iterativos y volver a evaluar las métricas para asegurar que los cambios tienen un impacto positivo.
+\end{itemize}
+
+\subsubsection{Reportes y Feedback}
+\begin{itemize}
+    \item Generar reportes detallados sobre el rendimiento del sistema y las áreas de mejora.
+    \item Proporcionar feedback continuo al equipo de desarrollo para asegurar que se mantengan los estándares de rendimiento.
+\end{itemize}
+
+\subsubsection{Herramientas y Recursos}
+\begin{itemize}
+    \item \textbf{Herramientas de Monitoreo y Análisis:}
+    \begin{itemize}
+        \item \textbf{New Relic}: \url{https://newrelic.com/}
+        \item \textbf{AppDynamics}: \url{https://www.appdynamics.com/}
+        \item \textbf{Datadog}: \url{https://www.datadoghq.com/}
+        \item \textbf{Prometheus}: \url{https://prometheus.io/}
+    \end{itemize}
+    \item \textbf{Herramientas de Pruebas de Rendimiento:}
+    \begin{itemize}
+        \item \textbf{Apache JMeter}: \url{https://jmeter.apache.org/}
+        \item \textbf{LoadRunner}: \url{https://microfocus.com/en-us/products/loadrunner-professional/overview}
+        \item \textbf{Gatling}: \url{https://gatling.io/}
+    \end{itemize}
+\end{itemize}
+
+
+\printbibliography
+
+\end{document}
